@@ -132,3 +132,28 @@ _Updated end-of-session. Most recent at top._
 5. `git commit -m "Wire Formspree + drop personal LinkedIn + Company Page brand voice"` + `git push`.
 
 **Once those land:** site is live at https://crewos.co.uk with working form; build-in-public post #1 publishes from the Crew OS Company Page; I move to cold-outreach pack + v0 quote engine.
+
+## 2026-05-16 — Session 2 (cont.) — SITE IS LIVE
+- ✅ **`https://crewos.co.uk` returns HTTP 200.** DNS resolves to four GitHub Pages IPs as expected. `www.crewos.co.uk` CNAMEs correctly to `finleystephenson.github.io`. HTTPS works.
+- ✅ Pages workflow deployed (green tick on GitHub Actions).
+- ✅ Formspree wired with form ID `maqvrvve`. Footer cleaned of personal LinkedIn.
+- ✅ DECISIONS.md updated with **scheduled-AI operating mode** as the official stance.
+
+**Content + outreach pack shipped this turn (in repo, ready for use):**
+- `content/linkedin-posts-pack.md` — 5 LinkedIn build-in-public posts written, calibrated for one-session scheduling.
+- `offer/cold-outreach/facebook-group-post.md` — UK trades Facebook group template + 5 target groups.
+- `offer/cold-outreach/reddit-show-ih.md` — Reddit + Indie Hackers Show post template + 5 target subs.
+- `offer/cold-outreach/checkatrade-cold-email.md` — cold email template, sending rules, deliverability requirements, volume targets, expected funnel maths.
+
+**Still operator-pending (one batched session, ~30 min):**
+1. Create Crew OS LinkedIn Company Page (step set previously, 17–26).
+2. Schedule 5 LinkedIn posts using LinkedIn native scheduler.
+3. Sign up for Resend (free tier, no card) → paste API key into GitHub repository secrets.
+4. Sign up for ImprovMX (free tier) → set up hello@crewos.co.uk → crewos.uk@gmail.com forwarding.
+5. Join 5 UK trades Facebook groups (admin-approval, async wait).
+6. Push the pending 4 modified files + the new pack files.
+
+**Next (my side, no operator click needed):**
+- Begin v0 quote engine in `/v0/` (Python + Anthropic API + Whisper). Goal: voice-note + 3 photos → branded PDF quote, runnable end-to-end on my machine before next operator handoff.
+- Set up the GitHub Actions secrets schema (placeholder names so operator pastes API keys into the right place).
+- Draft the auto-reply email template for Formspree submissions.
