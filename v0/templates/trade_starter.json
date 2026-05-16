@@ -1,0 +1,51 @@
+{
+  "_meta": {
+    "description": "Starter rates and notes for UK trades, used only when an intake's trader block doesn't specify hourly_rate_gbp or callout_fee_gbp. Conservative mid-market estimates as of May 2026.",
+    "last_updated": "2026-05-16",
+    "source": "Trade norms research, May 2026; landscape.md §2"
+  },
+  "trades": {
+    "electrical": {
+      "typical_hourly_rate_gbp": 45,
+      "typical_callout_fee_gbp": 60,
+      "common_line_item_units": ["hour", "fixed", "per socket", "per circuit"],
+      "regulatory_notes": "Notifiable work under Part P must be tested and certified. Reference NICEIC / NAPIT registration if applicable.",
+      "typical_markup_on_materials_pct": 12
+    },
+    "plumbing_heating": {
+      "typical_hourly_rate_gbp": 50,
+      "typical_callout_fee_gbp": 75,
+      "common_line_item_units": ["hour", "fixed", "per radiator", "per fitting"],
+      "regulatory_notes": "Gas work requires Gas Safe registration — never quote gas work without a registered engineer doing the work. Reference number where applicable.",
+      "typical_markup_on_materials_pct": 15
+    },
+    "building": {
+      "typical_hourly_rate_gbp": 35,
+      "typical_callout_fee_gbp": 0,
+      "common_line_item_units": ["day", "fixed", "per m²"],
+      "regulatory_notes": "Building Regulations notification may apply (Part L, Part P, etc.). Quote does not include building control fees unless stated.",
+      "typical_markup_on_materials_pct": 10
+    },
+    "groundworks": {
+      "typical_hourly_rate_gbp": 38,
+      "typical_callout_fee_gbp": 0,
+      "common_line_item_units": ["day", "fixed", "per m³"],
+      "regulatory_notes": "Quote assumes no asbestos / contaminated land / underground services not disclosed at survey.",
+      "typical_markup_on_materials_pct": 8
+    },
+    "bricklaying": {
+      "typical_hourly_rate_gbp": 32,
+      "typical_callout_fee_gbp": 0,
+      "common_line_item_units": ["per 1000 bricks", "per m²", "day"],
+      "regulatory_notes": "Quote assumes mortar mix and lifting plant included; scaffold above 1.5m extra unless stated.",
+      "typical_markup_on_materials_pct": 8
+    },
+    "general": {
+      "typical_hourly_rate_gbp": 35,
+      "typical_callout_fee_gbp": 40,
+      "common_line_item_units": ["hour", "fixed"],
+      "regulatory_notes": "Generic quote; check trade-specific regs as appropriate.",
+      "typical_markup_on_materials_pct": 10
+    }
+  }
+}

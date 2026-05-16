@@ -5,3 +5,15 @@ node_modules/
 dist/
 build/
 *.log
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.venv/
+venv/
+# Local-only workflow outputs (workflows commit their own logs)
+triage-output.json
+runner-output.json
+batch-output.json
+status-output.json

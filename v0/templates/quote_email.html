@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<title>Draft quote — Crew OS</title>
+</head>
+<body style="margin:0;padding:0;background:#f6f3ec;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;color:#0f0f0f;line-height:1.5;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr><td align="center" style="padding:28px 12px;">
+  <table role="presentation" width="600" style="max-width:600px;width:100%;background:#fff;border:1px solid #1a1a1a;" cellpadding="0" cellspacing="0">
+    <tr><td style="padding:28px 28px 8px;">
+
+      <div style="font-size:13px;color:#6b6b6b;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;">Crew OS — draft quote for your review</div>
+      <div style="font-family:Georgia,'Times New Roman',serif;font-size:24px;font-weight:700;line-height:1.15;color:#0f0f0f;">{{ quote.summary }}</div>
+      <div style="font-size:14px;color:#2a2a2a;margin-top:4px;">Generated {{ generated_at }} · Total <strong>£{{ '%.2f'|format(quote.total_gbp) }}</strong></div>
+
+      <hr style="margin:22px 0;border:none;border-top:1px solid #1a1a1a;">
+
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+          <td valign="top" style="font-size:13px;padding-right:16px;width:50%;">
+            <div style="text-transform:uppercase;letter-spacing:0.06em;color:#6b6b6b;margin-bottom:4px;">From</div>
+            <div><strong>{{ intake.trader.business_name }}</strong></div>
+            <div>{{ intake.trader.owner_name }}</div>
+            <div>{{ intake.trader.address }}</div>
+            <div>{{ intake.trader.phone }}</div>
+            <div>{{ intake.trader.email }}</div>
+            {% if intake.trader.registration_numbers %}
+              <div style="margin-top:4px;color:#6b6b6b;">{{ intake.trader.registration_numbers }}</div>
+            {% endif %}
+            {% if intake.trader.vat_registered and intake.trader.vat_number %}
+              <div style="color:#6b6b6b;">VAT no. {{ intake.trader.vat_number }}</div>
+            {% endif %}
+          </td>
+          <td valign="top" style="font-size:13px;padding-left:16px;width:50%;border-left:1px solid #e5e0d4;">
+            <div style="text-transform:uppercase;letter-spacing:0.06em;color:#6b6b6b;margin-bottom:4px;">For</div>
+            <div><strong>{{ intake.customer.name }}</strong></div>
+            <div>{{ intake.customer.address }}</div>
+            <div>{{ intake.customer.email }}</div>
+          </td>
+        </tr>
+      </table>
+
+      <hr style="margin:22px 0;border:none;border-top:1px solid #1a1a1a;">
+
+      <div style="text-transform:uppercase;letter-spacing:0.06em;color:#6b6b6b;font-size:13px;margin-bottom:8px;">Job</div>
+      <div style="font-size:14px;color:#2a2a2a;">{{ intake.job.description }}</div>
+
+      <hr style="margin:22px 0;border:none;border-top:1px solid #1a1a1a;">
+
+      <div style="text-transform:uppercase;letter-spacing:0.06em;color:#6b6b6b;font-size:13px;margin-bottom:8px;">Line items</div>
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-size:14px;border-collapse:collapse;">
+        <thead>
+          <tr style="background:#f6f3ec;">
+            <th align="left"  style="padding:8px;border-bottom:1px solid #1a1a1a;font-weight:600;">Description</th>
+            <th align="right" style="padding:8px;border-bottom:1px solid #1a1a1a;font-weight:600;width:80px;">Qty</th>
+            <th align="right" style="padding:8px;border-bottom:1px solid #1a1a1a;font-weight:600;width:100px;">Unit £</th>
+            <th align="right" style="padding:8px;border-bottom:1px solid #1a1a1a;font-weight:600;width:110px;">Subtotal £</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for li in quote.line_items %}
+          <tr>
+            <td style="padding:10px 8px;border-bottom:1px solid #e5e0d4;">{{ li.description }}</td>
+            <td align="right" style="padding:10px 8px;border-bottom:1px solid #e5e0d4;">{{ li.quantity }} {{ li.unit }}</td>
+            <td align="right" style="padding:10px 8px;border-bottom:1px solid #e5e0d4;">£{{ '%.2f'|format(li.unit_price_gbp) }}</td>
+            <td align="right" style="padding:10px 8px;border-bottom:1px solid #e5e0d4;">£{{ '%.2f'|format(li.subtotal_gbp) }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="3" align="right" style="padding:10px 8px;">Subtotal</td>
+            <td align="right" style="padding:10px 8px;">£{{ '%.2f'|format(quote.subtotal_gbp) }}</td>
+          </tr>
+          {% if quote.vat_gbp and quote.vat_gbp > 0 %}
+          <tr>
+            <td colspan="3" align="right" style="padding:6px 8px;">VAT (20%)</td>
+            <td align="right" style="padding:6px 8px;">£{{ '%.2f'|format(quote.vat_gbp) }}</td>
+          </tr>
+          {% endif %}
+          <tr>
+            <td colspan="3" align="right" style="padding:12px 8px;border-top:2px solid #0f0f0f;font-weight:700;font-size:16px;">Total</td>
+            <td align="right" style="padding:12px 8px;border-top:2px solid #0f0f0f;font-weight:700;font-size:16px;">£{{ '%.2f'|format(quote.total_gbp) }}</td>
+          </tr>
+        </tfoot>
+      </table>
+
+      <hr style="margin:22px 0;border:none;border-top:1px solid #1a1a1a;">
+
+      <div style="font-size:13px;color:#2a2a2a;line-height:1.6;">
+        <div><strong>Payment terms:</strong> {{ quote.payment_terms }}</div>
+        <div><strong>Quote valid until:</strong> {{ quote.valid_until }}</div>
+        {% if quote.notes %}<div style="margin-top:8px;"><strong>Notes:</strong> {{ quote.notes }}</div>{% endif %}
+      </div>
+
+      <hr style="margin:28px 0 14px;border:none;border-top:1px solid #e5e0d4;">
+
+      <div style="font-size:11px;color:#6b6b6b;line-height:1.6;">
+        This is a <strong>draft quote</strong> generated by Crew OS for {{ intake.trader.business_name }} to review before sending to the customer.<br>
+        Built by Claude (AI), founded by Finley Stephenson. Reply to this email to reach a human.<br>
+        <a href="https://crewos.co.uk" style="color:#6b6b6b;">crewos.co.uk</a>
+      </div>
+
+    </td></tr>
+  </table>
+</td></tr>
+</table>
+</body>
+</html>

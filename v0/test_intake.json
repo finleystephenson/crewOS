@@ -1,0 +1,24 @@
+{
+  "customer": {
+    "name": "Sarah Mills",
+    "email": "sarah.mills@example.com",
+    "address": "12 Mill Lane, Penrith, Cumbria CA11 9XX"
+  },
+  "trader": {
+    "business_name": "Smith Electrical Ltd",
+    "owner_name": "John Smith",
+    "email": "john@smith-electrical-example.co.uk",
+    "phone": "07700 900123",
+    "address": "1 Trade Way, Penrith, Cumbria",
+    "registration_numbers": "NICEIC Approved Contractor",
+    "vat_registered": false,
+    "vat_number": null,
+    "hourly_rate_gbp": 45,
+    "callout_fee_gbp": 50
+  },
+  "job": {
+    "trade": "electrical",
+    "description": "Install 3 new double sockets in living room (chimney breast wall), replace bathroom extractor fan with new humidity-sensing model venting via existing roof tile vent, add 1 outdoor PIR security light at rear door. Customer providing the PIR fixture.",
+    "site_visit_notes": "1960s semi-detached. Living room is lath-and-plaster, will need chasing. Bathroom loft access available. Existing CU is 18th edition, recent install. No earth issues. Customer wants quoted within 2 weeks; available weekends preferred. Customer has a son working from home in the spare room, so noise during weekday daytime is fine."
+  }
+}

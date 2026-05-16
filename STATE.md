@@ -2,6 +2,50 @@
 
 _Updated end-of-session. Most recent at top._
 
+## 2026-05-16 — DAY 0 BUILD COMPLETE — autonomous mode armed
+
+**v0 product** (`/v0/`):
+- `quote_engine.py` — Groq Llama-3.3-70B → structured quote → Jinja2 → branded HTML → Resend send. Smoke-tested locally.
+- `templates/quote_email.html` — UK-trade-appropriate brutalist-typographic HTML quote.
+- `templates/trade_starter.json` — per-trade default rates + regulatory notes.
+- `test_intake.json` — known-good input for smoke runs.
+- `README.md` — architecture, failure modes, run instructions.
+
+**Workflows** (`.github/workflows/`):
+- `deploy.yml` (pre-existing) — pushes `/site/` to GitHub Pages.
+- `inbound-triage.yml` — every 2h UK day. Polls Gmail via IMAP, classifies pilot signups / intake replies / cold replies / unclassified. Routes each: sends onboarding emails, writes intake JSONs, auto-acks cold replies, logs to `/outbound/*.csv`. Commits new artefacts back.
+- `quote-engine-runner.yml` — triggered by pushes to `intake-queue/*.json`. Runs the engine, archives results to `_processed/` or `_failed/`.
+- `cold-email-batch.yml` — weekdays 11:00 UK. Reads `outbound/targets.csv`, personalises top N via Groq, sends via Resend, logs to `outbound/sent.csv`. Daily cap 3 during warmup; 30-day re-contact lockout; conservative-by-default.
+- `weekly-status.yml` — Fridays 17:00 UK. Inserts a Week-N status block near the top of STATE.md.
+
+**Scripts** (`/scripts/`):
+- `gmail_poll.py` — IMAP poller + classifier with Gmail labels for idempotency.
+- `inbound_triage.py` — orchestrator + handler logic.
+- `quote_engine_runner.py` — queue processor with retry + dead-letter.
+- `cold_email_batch.py` — outbound sender with personalisation + lockout.
+- `weekly_status.py` — repo-state introspector.
+
+**Site** (`/site/`):
+- `index.html` — re-toned: "tell us about the job (talk it out, type it up, or paste your site notes)" replaces the strict voice-only language. AI-transparency FAQ added.
+- `CNAME` — points GitHub Pages at `crewos.co.uk`.
+
+**Docs:**
+- `RUNBOOK.md` — stranger-takes-over manual (10 sections).
+- `README.md` — rewritten for autonomous mode.
+- `outbound/README.md` — cold-acquisition state convention.
+
+**Day-0 invariants:**
+- All Python compiles. v0 smoke-tested. Workflows YAML well-formed.
+- 5 GitHub secrets in place: `GMAIL_USERNAME`, `GMAIL_APP_PASSWORD`, `GROQ_API_KEY`, `RESEND_API_KEY`, `UPTIMEROBOT_API_KEY`.
+- Site live, HTTPS, deployed.
+- Reddit Day-0 post live in r/IndieHacking.
+- ImprovMX inbound still partially broken (DNS conflict not actually deleted by operator); web-form intake is the primary path.
+- `outbound/targets.csv` ships empty; cold-email volume is 0 until populated. Reddit + SEO + organic discovery are the only inbound channels at Day 0.
+
+**Untested in CI:** Every workflow has been syntax-validated and smoke-tested locally but has not yet been triggered with real API calls + real Gmail + real Resend domain. The first cron trigger is the real test. If something breaks, the workflow logs in https://github.com/finleystephenson/crewOS/actions will show it; `STATE.md`'s next weekly-status entry will surface it.
+
+**Next:** workflows take over. I'm done for the day. Operator returns May 29.
+
 ## 2026-05-15 — Session 1
 **Did:**
 - Scaffolded project (folders, STATE.md, DECISIONS.md, README.md).

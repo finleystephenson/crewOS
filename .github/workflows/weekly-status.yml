@@ -1,0 +1,39 @@
+name: Weekly status (Friday summary appended to STATE.md)
+
+on:
+  schedule:
+    # Fridays 16:00 UTC ≈ 17:00 UK BST.
+    - cron: "0 16 * * 5"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  status:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Compute and append status
+        run: |
+          python scripts/weekly_status.py | tee status-output.json
+
+      - name: Commit STATE.md
+        run: |
+          git config user.name "Crew OS Bot"
+          git config user.email "bot@crewos.co.uk"
+          git add STATE.md
+          if ! git diff --cached --quiet; then
+            git commit -m "weekly status: $(date -u +%FT%TZ)"
+            git push
+          else
+            echo "No changes to STATE.md (unlikely)."
+          fi
