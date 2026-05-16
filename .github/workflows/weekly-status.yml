@@ -26,14 +26,25 @@ jobs:
         run: |
           python scripts/weekly_status.py | tee status-output.json
 
-      - name: Commit STATE.md
+      - name: Commit + push (with rebase retry against concurrent pushes)
         run: |
           git config user.name "Crew OS Bot"
           git config user.email "bot@crewos.co.uk"
           git add STATE.md
-          if ! git diff --cached --quiet; then
-            git commit -m "weekly status: $(date -u +%FT%TZ)"
-            git push
-          else
+          if git diff --cached --quiet; then
             echo "No changes to STATE.md (unlikely)."
+            exit 0
           fi
+          git commit -m "weekly status: $(date -u +%FT%TZ)"
+          for i in 1 2 3 4 5; do
+            if git push 2>&1; then
+              echo "Pushed on attempt $i"
+              exit 0
+            fi
+            echo "Push rejected on attempt $i — fetching and rebasing"
+            git fetch origin main
+            git rebase origin/main || { git rebase --abort; exit 1; }
+            sleep $((i * 3))
+          done
+          echo "Push failed after 5 attempts" >&2
+          exit 1

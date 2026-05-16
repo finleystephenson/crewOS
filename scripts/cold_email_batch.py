@@ -24,6 +24,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
 from v0.quote_engine import _call_groq, send_via_resend  # noqa: E402
+from scripts import suppressions  # noqa: E402
 
 TARGETS_CSV = ROOT / "outbound" / "targets.csv"
 SENT_CSV = ROOT / "outbound" / "sent.csv"
@@ -98,8 +99,11 @@ def _append_sent(row: dict[str, Any]) -> None:
         w.writerow(row)
 
 
-def _is_eligible(row: dict[str, str], now: dt.datetime) -> bool:
-    if not row.get("email") or "@" not in row["email"]:
+def _is_eligible(row: dict[str, str], now: dt.datetime, suppressed: set[str]) -> bool:
+    email = (row.get("email") or "").strip().lower()
+    if not email or "@" not in email:
+        return False
+    if email in suppressed:
         return False
     if row.get("country", "UK").upper() != "UK":
         return False
@@ -133,8 +137,9 @@ def run() -> dict[str, Any]:
         return {"status": "no_targets", "sent": 0}
 
     headers = list(rows[0].keys())
-    now = dt.datetime.utcnow()
-    eligible = [r for r in rows if _is_eligible(r, now)]
+    now = dt.datetime.now(dt.timezone.utc).replace(tzinfo=None)
+    suppressed = suppressions.load()
+    eligible = [r for r in rows if _is_eligible(r, now, suppressed)]
     batch = eligible[:DAILY_CAP]
     results: list[dict[str, Any]] = []
 

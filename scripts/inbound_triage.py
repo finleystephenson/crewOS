@@ -25,7 +25,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from scripts import gmail_poll  # noqa: E402
+from scripts import gmail_poll, suppressions  # noqa: E402
 from v0.quote_engine import send_via_resend  # noqa: E402
 
 INTAKE_QUEUE = ROOT / "intake-queue"
@@ -150,24 +150,54 @@ def handle_intake_reply(item: dict[str, Any]) -> dict[str, Any]:
 
 
 def handle_cold_reply(item: dict[str, Any]) -> dict[str, Any]:
+    body_preview = item.get("body_preview") or ""
+    sender_email = _extract_addr(item.get("from", ""))
+
     _csv_append(
         OUTBOUND / "cold_replies.csv",
         {
             "ts": _now_iso(),
             "from": item.get("from", ""),
             "subject": item.get("subject", ""),
-            "preview": (item.get("body_preview") or "")[:400],
+            "preview": body_preview[:400],
         },
     )
-    # Auto-acknowledge so the prospect knows it was received.
+
+    # Suppression check — honour the unsubscribe promise made in every cold email.
+    if sender_email and suppressions.should_suppress(body_preview):
+        added = suppressions.add(
+            sender_email,
+            reason=f"cold reply requested removal — subject: {item.get('subject','')[:120]}",
+            source="cold_reply_auto",
+        )
+        # Send a one-line confirmation (no further follow-up).
+        send_via_resend(
+            to_email=sender_email,
+            subject="You're off the list",
+            html=(
+                "<p>Done. We've added you to our suppression list and you won't "
+                "receive any further emails from Crew OS.</p>"
+                "<p>If this was a mistake, reply once and a human will see it on or after May 29.</p>"
+            ),
+            reply_to="hello@crewos.co.uk",
+        )
+        return {
+            "action": "suppressed_via_reply",
+            "from": sender_email,
+            "newly_added": added,
+        }
+
+    # Otherwise auto-acknowledge.
     send_via_resend(
-        to_email=_extract_addr(item.get("from", "")),
+        to_email=sender_email,
         subject="Re: " + item.get("subject", "").replace("Re: ", "", 1),
         html=(
             "<p>Thanks for the reply. Crew OS is currently running autonomously for a 14-day "
             "experiment — the founder is stepping back, and an AI is handling responses.</p>"
             "<p>If you'd like to join the pilot, reply with the word <strong>'send it'</strong> "
             "and we'll send you the intake template within a few minutes.</p>"
+            "<p>If you'd like to opt out instead, reply with <strong>'stop'</strong> and we'll "
+            "never email this address again.</p>"
             "<p>Anything else? A human (Finley) reads these threads when the experiment ends "
             "on May 29. crewos.co.uk</p>"
         ),
