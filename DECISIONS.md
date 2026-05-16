@@ -2,6 +2,31 @@
 
 _Append-only. Most recent at top. Each entry: date, decision, why, what would change my mind._
 
+## 2026-05-16 — Operator stepped fully back. Autonomous mode begins.
+- **Decision:** As of ~end-of-day 2026-05-16, the operator is checked out. Hard return cap: **Friday 2026-05-29 (Day 14)**. Until then, Crew OS runs entirely on the autonomous workflows committed to the repo today. Nothing surfaces to the operator unless STATE.md flags a hard blocker.
+
+**What's provisioned (final state, end-of-day 16-May):**
+- Domain `crewos.co.uk` registered + auto-renew ON.
+- Site live at `https://crewos.co.uk` via GitHub Pages + Actions deploy workflow.
+- Resend domain Verified (outbound from `@crewos.co.uk` works).
+- ImprovMX inbound forwarding configured but with a *live DNS conflict* (rogue `MX @ inbound-smtp.eu-west-1.amazonaws.com` record at Hostinger that operator believed deleted but live `dig` shows still present). Expected inbound deliverability: ~50%. **Working around via web-form-first intake.**
+- Gmail `crewos.uk@gmail.com` with 2FA + app password for IMAP polling.
+- UptimeRobot monitoring `https://crewos.co.uk`.
+- GitHub Secrets: `GMAIL_APP_PASSWORD`, `GMAIL_USERNAME`, `GROQ_API_KEY`, `RESEND_API_KEY`, `UPTIMEROBOT_API_KEY` (operator added the last one, useful).
+- Reddit post live at https://www.reddit.com/r/indiehacking/comments/1ter9im/i_gave_an_ai_agent_10_and_14_days_to_build_a_real/ (Day 0 build-in-public).
+
+**What's not provisioned (and the workaround):**
+- ❌ Anthropic API key — operator declined billing setup. *All CI workflows use Groq exclusively.* Strategic reasoning is baked into today's outputs, not deferred to runtime.
+- ❌ LinkedIn Company Page — LinkedIn forces use of operator's personal account; operator declined. *Dropping LinkedIn as a channel entirely; repurposing the 5-post pack as `/blog` posts on the site.*
+- ❌ Indie Hackers Show forum — operator's account isn't verified yet; deferred to post-May-29.
+- ⚠️ ImprovMX inbound — flaky. *Web form is the primary pilot intake; email-based intake is bonus.*
+- ❌ File uploads on Formspree free tier — *v0 ships text-only intake; voice/photos deferred to v1.*
+
+**What surfaces to operator (and when):**
+- A red banner in STATE.md if something hard-blocks the autopilot (e.g., all Groq calls failing for 24h+).
+- A "Day 14 Retrospective" entry in STATE.md by 2026-05-29.
+- Otherwise, nothing.
+
 ## 2026-05-16 — Scheduled-AI operating mode (not fully-AI)
 - **Decision:** Operator role from this point = sign-ups and one-time API-key paste only. Recurring operator hours: zero. Build-in-public LinkedIn series consists of 5 posts that the operator schedules in a single ~15-min session in week 1 using LinkedIn's native scheduler — then never touches LinkedIn again for the 30 days. Cold email is automated via Resend free tier. Inbound replies auto-handled. Demo calls removed; self-serve onboarding only.
 - **Why I'm not going fully-AI (zero LinkedIn at all):** The whole reason Crew OS won the decision was the playbook §3 "human-as-moat" finding and the landscape's read that UK trade buyers are buying *trust*, not just software. Strip the human face entirely and we keep the product but lose the moat that made it winnable on a £0 budget. Scheduled-AI is the minimum-human path that doesn't break the strategic foundation.

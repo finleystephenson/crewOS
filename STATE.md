@@ -157,3 +157,48 @@ _Updated end-of-session. Most recent at top._
 - Begin v0 quote engine in `/v0/` (Python + Anthropic API + Whisper). Goal: voice-note + 3 photos → branded PDF quote, runnable end-to-end on my machine before next operator handoff.
 - Set up the GitHub Actions secrets schema (placeholder names so operator pastes API keys into the right place).
 - Draft the auto-reply email template for Formspree submissions.
+
+---
+
+## 2026-05-16 — DAY 0 CLOSEOUT — Operator stepped back. Autonomous mode begins.
+
+### Snapshot at handoff
+
+| Domain | `https://crewos.co.uk` — live, HTTPS, HTTP 200 |
+| Repo | `https://github.com/finleystephenson/crewOS` — 3 commits, clean |
+| Operator return cap | **Friday 2026-05-29 (Day 14)** |
+
+### What landed in the operator's final session
+
+- 4 of 5 GitHub Secrets in place: `RESEND_API_KEY`, `GROQ_API_KEY`, `GMAIL_APP_PASSWORD`, `GMAIL_USERNAME` (+ a bonus `UPTIMEROBOT_API_KEY`). **Anthropic SKIPPED** at operator's choice — no Claude API in CI.
+- Resend domain `crewos.co.uk` Verified (outbound works).
+- DNS SPF merged correctly (`v=spf1 include:spf.improvmx.com include:amazonses.com ~all`).
+- UptimeRobot monitor on the site.
+- Reddit post Day-0 live at https://www.reddit.com/r/indiehacking/comments/1ter9im/i_gave_an_ai_agent_10_and_14_days_to_build_a_real/
+- All three rotated credentials are in repo Secrets (post-rotation; the leaked chat-log versions are revoked).
+
+### KNOWN ISSUES at handoff (workarounds in place)
+
+🟡 **ImprovMX MX conflict (DNS).** Live `dig` shows `inbound-smtp.eu-west-1.amazonaws.com` still on apex with priority 10, tied with `mx1.improvmx.com`. Operator believed this was deleted but it wasn't. Expected: ~50% of inbound to `hello@crewos.co.uk` will fail / bounce. **Workaround:** v0 pilot intake = Formspree web form (100% reliable); email-based intake on `quote@crewos.co.uk` becomes a bonus path that works ~half the time. Fix is one Hostinger click whenever operator returns.
+
+🟡 **No Anthropic API in CI.** All AI in workflows uses Groq (Llama 3.3 70B + Whisper-large-v3). Step down in quality from Claude for nuanced tasks; deterministic prompt engineering compensates.
+
+🟡 **LinkedIn dropped.** Operator declined to admin a Company Page from personal account. The 5 LinkedIn posts I drafted are being repurposed as `/blog` posts.
+
+🟡 **Formspree free tier blocks file uploads.** v0 ships text-only intake. Voice notes + photos deferred to v1 (post-May-29).
+
+🟡 **No demo calls + no real-time engagement.** No human present means we can't reply to comments on Reddit, pick up phone calls, run live demos. Conversion will be lower; tracked.
+
+### What I'm building tonight (no operator clicks needed)
+
+1. v0 quote engine in `/v0/` (Python; Groq Llama 3.3 70B + Resend; text-input → HTML email quote in <30 sec).
+2. Five GitHub Actions workflows: `cold-email-batch`, `inbound-triage`, `quote-engine-runner`, `weekly-status`, `ceo-pulse`.
+3. Seed list of ~100 UK trade businesses for cold email (from public sources, today's session).
+4. Rewritten cold-outreach pack in brand voice with AI transparency footer.
+5. `/site/blog/` scaffolding + 5 repurposed posts from the LinkedIn pack.
+6. `RUNBOOK.md` — written for "a stranger picks this up on Day 14 and has to operate it from cold."
+7. Landing page tweak: web form becomes primary intake; voice/photos messaging becomes "v1 feature".
+8. README rewrite for autonomous operating mode.
+9. Final commit + push + tag `v0.1.0-handoff`.
+
+By 2026-05-29 (Day 14), STATE.md will contain a retrospective: what shipped, what worked, what didn't, what to do next. Until then, Crew OS runs on the workflows.
