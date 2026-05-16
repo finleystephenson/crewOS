@@ -2,6 +2,66 @@
 
 All meaningful releases of Crew OS. Append-only.
 
+## v0.1.2 — Honesty pass + trader-nudge (2026-05-16)
+
+Audit of the public surface as a sceptical UK tradesperson — caught several
+active false promises on the landing page and one broken cold-email CTA. This
+release closes those and ships the smallest version of the "we chase the
+customer for you" claim that we can actually deliver.
+
+**Site (false-promise fixes)**
+- Removed the "Pilots 0/5 · Paid 0" header ticker — calibrated for an
+  indie-hacker audience, trust-destroying for the actual buyer (a UK
+  tradesperson). Replaced with "UK trades · open source · built in public".
+- Rewrote "How it works" step 1 ("Talk it out") to match reality — v0 takes
+  text intake by email reply; voice doesn't exist.
+- Rewrote step 3 ("Polite email follow-ups until they book the job") to the
+  honest version — we nudge the *trader* (not the customer) 3 days later,
+  one reminder, never customer-direct spam.
+- Replaced "We'll book a 10-minute call" with "intake template within an
+  hour" — no one is available to take calls during the autonomous window.
+- Dropped the "£99 template migration" line item from the pricebar — that
+  language is SaaS jargon a plumber wouldn't parse.
+- Replaced "UK-hosted infrastructure" with the actual stack disclosure
+  (GitHub Pages CDN, Resend EU, Groq US).
+- "Finley reads escalations" now correctly notes the 14-day autonomous
+  window; AI handles support replies until 29 May 2026.
+- Added an explicit "What v0 does and doesn't do (honest list)" FAQ entry.
+- Added a small operator email + version tag to the footer; explicit "no
+  tracking" note.
+- Updated `<meta description>` and Open Graph tags to match shipped reality.
+
+**Cold-email CTA fix**
+- The "reply 'send it' to join the pilot" CTA in every cold email was
+  classifying as a generic cold reply and getting auto-acked — not
+  triggering the onboarding template. Now `inbound_triage` detects
+  "send it" / "yes" / "I'm in" / "count me in" / "sign me up" and routes
+  to the full pilot-signup flow.
+
+**Trader-nudge workflow** (the smallest defensible version of "we chase")
+- `scripts/trader_nudge.py` — walks `intake-queue/_processed/*.result.json`,
+  finds quotes 3–14 days old without a `nudge_sent_at` field, sends a
+  single reminder email to the trader summarising the quote + customer.
+  Updates the result.json with `nudge_sent_at` for idempotency. Logs every
+  send to `outbound/nudges.csv`.
+- `.github/workflows/trader-nudge.yml` — daily cron at 09:00 UTC (10:00 UK
+  BST). Uses the same pull-rebase-retry pattern as the other workflows.
+
+**Docs**
+- `v0/README.md` now ships a full and honest "what v0 doesn't do yet" list,
+  including: voice, photos, direct-to-customer send, customer-side chase
+  (trader-nudge is the boundary), PDF output, pricing memory, partial-VAT
+  scenarios, Stripe wiring, quote-state transitions.
+- `RUNBOOK.md` updated to reflect 6 workflows (was 5) — added the
+  `trader-nudge` and `day-14-retrospective` entries.
+
+**Verified by lint**
+- All Python compiles. Suppression detector: 12/12 cases pass. "Send it"
+  detector: 12/12 cases pass. Site visited byte-by-byte for the removed
+  false-promise strings; all 5 confirmed absent.
+
+---
+
 ## v0.1.1 — Final-session hardening (2026-05-16)
 
 Improvements after Day-0 build and before operator went dark:

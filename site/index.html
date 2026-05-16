@@ -4,10 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Crew OS — quotes in 8 minutes, not an hour</title>
-<meta name="description" content="Crew OS turns a voice note and a couple of site photos into a branded, accurate quote sent before you get home. For UK trade businesses with 1–5 people. £49/month. 14-day free pilot, no card.">
-<meta property="og:title" content="Crew OS — quotes in 8 minutes, not an hour">
-<meta property="og:description" content="For UK trade businesses with 1–5 people. £49/month. 14-day free pilot, no card.">
+<meta name="description" content="Crew OS drafts a branded client quote in under 10 minutes from a text intake, then nudges you 3 days later if the customer's gone quiet. For UK trade businesses with 1–5 people. £49/month after a 14-day free pilot. No card.">
+<meta property="og:title" content="Crew OS — quotes in under 10 minutes, for UK trades">
+<meta property="og:description" content="Draft client quotes from a text intake, in your pricing voice. 3-day nudge so you don't forget the ones that went quiet. For 1–5 person UK crews. £49/mo. 14-day free pilot.">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://crewos.co.uk/">
+<link rel="canonical" href="https://crewos.co.uk/">
 <style>
   *,*::before,*::after { box-sizing: border-box; }
   :root {
@@ -117,7 +119,7 @@
 
   <header>
     <div class="mark">Crew&nbsp;OS</div>
-    <div class="ticker">Day 1 of 30 · Pilots 0/5 · Paid 0</div>
+    <div class="ticker">UK trades · open source · built in public</div>
   </header>
 
   <h1>Quotes in <span class="accent">8 minutes</span>,<br>not an hour.</h1>
@@ -134,7 +136,6 @@
   <div class="pricebar">
     <div><strong>£49<span style="font-weight:400">/mo</span></strong><span>per crew, billed monthly</span></div>
     <div><strong>£490<span style="font-weight:400">/yr</span></strong><span>two months free</span></div>
-    <div><strong>£99</strong><span>one-time template migration (optional)</span></div>
     <div><strong>0p</strong><span>14-day pilot, no card</span></div>
   </div>
 
@@ -143,15 +144,15 @@
     <ol class="how">
       <li>
         <strong>Tell us about the job.</strong>
-        Talk it out, type it up, or paste your site notes — whichever's fastest. Send it as a reply to our onboarding email.
+        Type up the job, paste your site notes, whatever's fastest. Send it as a reply to our onboarding email — we ask for the customer, the work, your pricing, and your trade language.
       </li>
       <li>
         <strong>We turn it into a quote in your voice.</strong>
-        A branded HTML quote in your pricing, your trade language, your terms. Drafted in ~8 minutes and emailed back to you for review before it goes to the customer.
+        A branded HTML quote in your pricing, your trade language, your terms. Drafted in under 10 minutes and emailed back to you for review. You forward it to the customer — we don't send anything to them without your sign-off.
       </li>
       <li>
-        <strong>We chase it for you.</strong>
-        Polite email follow-ups until they book the job, ask a question, or formally say no. You stop forgetting the ones that went quiet.
+        <strong>We nudge you 3 days later.</strong>
+        If the customer's gone quiet, we send you a single reminder — quote summary, customer details, total. No spam to your customer; we don't email them directly. You stop forgetting the ones that went silent.
       </li>
     </ol>
   </section>
@@ -170,7 +171,7 @@
       <input type="hidden" name="_subject" value="Crew OS pilot signup">
       <button type="submit">Join the pilot list</button>
     </form>
-    <div class="small">Real builders only. We'll get in touch in 24 hours and book a 10-minute call.</div>
+    <div class="small">Real UK tradespeople only. Within an hour you'll get an email with the intake template — fill it out, reply, and you'll have your first draft quote back within minutes.</div>
   </section>
 
   <section>
@@ -182,11 +183,11 @@
       </details>
       <details>
         <summary>What do you do with my customer data?</summary>
-        <p>It stays in your account. We don't sell it. We don't use it to train models. We use it to run the follow-up sequence for the job that's actively quoted. UK-hosted infrastructure.</p>
+        <p>It stays in your account. We don't sell it. We don't use it to train models. We use it to draft the quote and to send the 3-day nudge to <em>you</em> (never to your customer). Site hosted on GitHub Pages (global CDN, no tracking). Email infrastructure on Resend (EU region). LLM via Groq (US). Don't send sensitive personal data we don't need.</p>
       </details>
       <details>
         <summary>Will it write a quote that's actually accurate?</summary>
-        <p>Only if you tell it your real prices in the onboarding (10 minutes). It quotes in your pricing voice, not a generic one. You always see and approve the quote before it goes out — we don't auto-send anything to customers without your sign-off.</p>
+        <p>Only if you tell it your real prices in the intake template (~2 minutes of typing). It quotes in your pricing voice, not a generic one. You always see and approve the quote before it goes to the customer — we never auto-send to your customer.</p>
       </details>
       <details>
         <summary>I do agricultural / electrical / plumbing / boiler / brickwork — does it work for my trade?</summary>
@@ -194,19 +195,28 @@
       </details>
       <details>
         <summary>Wait — is this built by AI?</summary>
-        <p>Yes, transparently. Crew OS was founded by Finley Stephenson and is operated day-to-day by Claude, an AI agent. The product itself (your quote, your follow-ups, your customer comms) is real software the AI built. Reply to any email to reach a human — Finley reads escalations.</p>
+        <p>Yes, transparently. Crew OS was founded by Finley Stephenson and is operated day-to-day by Claude, an AI agent. The product itself (your quote draft, the 3-day nudge) is real software the AI built. Replies to support emails are handled by the AI through 29 May 2026; after that, Finley reads escalations. We don't pretend to be human in email signatures.</p>
+      </details>
+      <details>
+        <summary>What v0 does and doesn't do (honest list)</summary>
+        <p><strong>Does:</strong> Takes a text intake (customer + job + your pricing) by email, drafts a branded HTML quote inside ~10 minutes, sends back to you for review. Nudges you once 3 days later if you haven't told us the job's booked or lost.</p>
+        <p><strong>Doesn't (yet):</strong> Voice notes. Photo uploads. PDF output. Sending the quote directly to the customer. Auto-chasing the customer. Multi-trader pricing memory across jobs. These are v1 features earned by getting v0 working with real pilots first.</p>
       </details>
       <details>
         <summary>What's the catch with the free pilot?</summary>
-        <p>The catch is honest: we want feedback. We'll ask you for a 10-minute call at the end of the 14 days and a one-paragraph written testimonial if it worked. That's it.</p>
+        <p>The catch is honest: we want feedback. At the end of the 14 days we'll ask for a short written testimonial if it worked. No call required — async-friendly, you tell us by email when you want. That's it.</p>
       </details>
     </div>
   </section>
 
   <footer class="ftr">
-    <div>Made in the UK. Built in public.</div>
     <div>
-      <a href="https://github.com/finleystephenson/crewOS" target="_blank" rel="noopener">Source on GitHub</a>
+      Made in the UK. Built in public. Open source.<br>
+      <span style="font-size:11px;">No tracking, no cookies, no analytics on this page.</span>
+    </div>
+    <div>
+      <a href="https://github.com/finleystephenson/crewOS" target="_blank" rel="noopener">Source on GitHub</a><br>
+      <span style="font-size:11px;">v0.1.2 · operator @ <a href="mailto:hello@crewos.co.uk" style="color:var(--muted);">hello@crewos.co.uk</a></span>
     </div>
   </footer>
 

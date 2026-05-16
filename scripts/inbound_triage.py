@@ -163,6 +163,18 @@ def handle_cold_reply(item: dict[str, Any]) -> dict[str, Any]:
         },
     )
 
+    # Did they reply with "send it"? That's our cold-email CTA — promote to
+    # full pilot-signup flow (onboarding template, not just an ack).
+    import re as _re
+    body_lower = (body_preview or "").lower()
+    body_stripped = _re.sub(r"^\s*>.*$", "", body_lower, flags=_re.M).strip()
+    if sender_email and (
+        body_stripped.startswith("send it")
+        or _re.search(r"\bsend it\b", body_lower[:300])
+        or _re.search(r"\b(yes|im in|i'm in|i am in|count me in|sign me up)\b", body_stripped[:120])
+    ):
+        return handle_pilot_signup({"applicant_email": sender_email, "from": item.get("from", "")})
+
     # Suppression check — honour the unsubscribe promise made in every cold email.
     if sender_email and suppressions.should_suppress(body_preview):
         added = suppressions.add(

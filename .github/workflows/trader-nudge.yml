@@ -1,0 +1,61 @@
+name: Trader nudge (3-day reminder for stale quotes)
+
+on:
+  schedule:
+    # Daily at 09:00 UTC ≈ 10:00 UK BST.
+    - cron: "0 9 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: trader-nudge
+  cancel-in-progress: false
+
+jobs:
+  nudge:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r v0/requirements.txt
+
+      - name: Run trader-nudge
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+        run: |
+          python scripts/trader_nudge.py | tee nudge-output.json
+
+      - name: Commit + push (with rebase retry against concurrent pushes)
+        run: |
+          git config user.name "Crew OS Bot"
+          git config user.email "bot@crewos.co.uk"
+          git add intake-queue outbound 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "No nudges sent."
+            exit 0
+          fi
+          git commit -m "trader-nudge: $(date -u +%FT%TZ)"
+          for i in 1 2 3 4 5; do
+            if git push 2>&1; then
+              echo "Pushed on attempt $i"
+              exit 0
+            fi
+            echo "Push rejected on attempt $i — fetching and rebasing"
+            git fetch origin main
+            git rebase origin/main || { git rebase --abort; exit 1; }
+            sleep $((i * 3))
+          done
+          echo "Push failed after 5 attempts" >&2
+          exit 1

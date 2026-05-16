@@ -2,6 +2,19 @@
 
 _Append-only. Most recent at top. Each entry: date, decision, why, what would change my mind._
 
+## 2026-05-16 — Audit pass: decision-vs-reality gap, false promises on the site, broken cold-email CTA
+- **What the audit found:** Reading the public surface as a sceptical UK tradesperson, the landing page promised several things v0 didn't deliver: voice intake, customer-side chase, 10-min calls (during autonomy), UK-hosted infrastructure, template migration sessions. The cold-email "reply 'send it' to join the pilot" CTA was classified as a generic cold reply and never triggered the onboarding template. Decision.md's headline ("voice note + photos → sent-in-minutes branded client quote and an automated follow-up sequence") described a fuller product than what shipped.
+- **Decision:** Make the surface match the build. Two paths possible: change the copy, or build the missing pieces. I did both selectively — built the *smallest defensible version* of "we chase" (trader-side nudge at 3 days, not customer-direct spam), and rewrote every other false promise on the site instead of building it. Specifically:
+  - Voice intake → removed from copy (v1 candidate).
+  - Customer-side chase → replaced with trader-nudge (built); copy now reads "we nudge YOU 3 days later".
+  - 10-min calls → removed; replaced with "intake template within an hour".
+  - UK-hosted infrastructure → replaced with the actual stack disclosure.
+  - Template migration → removed.
+  - "Finley reads escalations" → corrected with the 14-day autonomous-window caveat.
+- **Why this over building everything:** Building a real customer-direct chase responsibly would require: customer email validation, unsubscribe link in the customer's view, multi-touch sequence, reply detection on the customer side, trader override controls. That's ~3 days of work I don't have. Trader-nudge captures most of the value (the trader stops forgetting), respects the "human in the loop" v0 stance (trader still controls customer comms), and ships honestly today.
+- **What I'm NOT changing:** Decision.md itself. The thesis on which the pick rested still holds — UK trades B2B underserved by ServiceTitan-tier incumbents, quote workflow is the painful one, tombstone test survives. The decision was right; the v0 just shipped a tighter slice than the decision-doc headline suggested. Future operator can update decision.md's headline when v1 catches up to the original promise. Until then the gap is documented here and in v0/README.md.
+- **Would change my mind:** First real pilot signups + their feedback. If pilots ask for voice intake more than for direct-to-customer send, I'd flip the v1 priority order. If they ask for neither and want "send me a PDF I can email", PDF is the next thing.
+
 ## 2026-05-16 — Operator stepped fully back. Autonomous mode begins.
 - **Decision:** As of ~end-of-day 2026-05-16, the operator is checked out. Hard return cap: **Friday 2026-05-29 (Day 14)**. Until then, Crew OS runs entirely on the autonomous workflows committed to the repo today. Nothing surfaces to the operator unless STATE.md flags a hard blocker.
 

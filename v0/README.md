@@ -80,10 +80,12 @@ provide their own. (v1 will add per-trader pricing storage.)
 
 - ❌ Voice transcription (Groq Whisper is wired, just no upload path)
 - ❌ Photo OCR / scene understanding
-- ❌ Direct-to-customer send (v0 sends to trader only)
-- ❌ Follow-up sequence (separate workflow, ships next)
-- ❌ PDF output (HTML email only)
-- ❌ Multi-trader pricing storage (uses intake's `trader` block each call)
-- ❌ VAT calculation for partial-VAT scenarios
+- ❌ Direct-to-customer send (v0 sends to trader only — by design until pilots tell us the quote text is dependable enough to auto-send)
+- ❌ Auto-chase the customer (v0.1.2: trader-nudge workflow sends ONE reminder to the trader 3 days after the quote — see `scripts/trader_nudge.py`. We don't email the customer directly.)
+- ❌ PDF output (HTML email only — opens fine in any modern mail client, copy-paste to a PDF tool if needed)
+- ❌ Multi-trader pricing storage (uses intake's `trader` block each call; no remembered pricing across jobs)
+- ❌ VAT calculation for partial-VAT scenarios (clean 0% or clean 20%; reverse-charge / margin-scheme / VAT-exempt not handled)
+- ❌ Stripe / billing wiring — after a successful pilot we'd need this for £49/mo conversion, but it's not present
+- ❌ A way for the trader to mark a quote "booked" / "lost" / "request chase" — replies are logged as `cold_reply` and don't update quote state
 
-All marked for v1 in `RUNBOOK.md`.
+All v1 candidates, prioritised after v0 produces real pilot signal.

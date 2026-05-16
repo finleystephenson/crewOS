@@ -30,13 +30,10 @@ Five files under `.github/workflows/`. All commit changes back to the repo using
 | `deploy.yml` | push to `main` | Builds the static site from `/site/` and deploys to GitHub Pages. |
 | `inbound-triage.yml` | cron every 2h (UK day) + manual | Polls `crewos.uk@gmail.com` via IMAP, classifies messages (pilot signup, intake reply, cold reply, needs-human), routes each: sends onboarding emails, writes intake JSONs, auto-acks cold replies, logs everything to `/outbound/*.csv`. |
 | `quote-engine-runner.yml` | push to `intake-queue/*.json` + manual | Processes each pending intake by calling `v0/quote_engine.py`. On success, moves to `intake-queue/_processed/` with a `.result.json` sidecar. On 3× failure, moves to `intake-queue/_failed/`. |
-| `cold-email-batch.yml` | cron weekdays 11:00 UK + manual | Reads `outbound/targets.csv`, picks N (default 3) eligible rows, personalises each via Groq, sends via Resend, logs to `outbound/sent.csv`. Won't email the same target within 30 days. |
-
-Stretch (may or may not be present depending on Day-0 close-of-day):
-
-| Workflow | Trigger | What it does |
-|---|---|---|
-| `weekly-status.yml` | cron Fridays 17:00 UK | Tallies metrics and appends a "Week N status" entry to `STATE.md`. |
+| `cold-email-batch.yml` | cron weekdays 11:00 UK + manual | Reads `outbound/targets.csv`, picks N (default 3) eligible rows, personalises each via Groq, sends via Resend, logs to `outbound/sent.csv`. Won't email the same target within 30 days. Honours `outbound/suppressions.csv`. |
+| `trader-nudge.yml` | cron daily 10:00 UK + manual | Walks `intake-queue/_processed/*.result.json`. For any quote 3–14 days old that hasn't been nudged, sends ONE reminder email to the trader. Doesn't email the customer. Logs to `outbound/nudges.csv`. |
+| `weekly-status.yml` | cron Fridays 17:00 UK + manual | Tallies metrics and inserts a "Week N status" block at the top of `STATE.md`. |
+| `day-14-retrospective.yml` | cron May 29 17:00 UK + manual | Writes a comprehensive cumulative retrospective block at the top of `STATE.md` with headline numbers + decision-points (keep going / pivot / pause). Idempotent. |
 
 ## 4. The v0 quote engine
 

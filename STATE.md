@@ -2,6 +2,63 @@
 
 _Updated end-of-session. Most recent at top._
 
+## 2026-05-16 — v0.1.2 — Honesty pass after sceptical-buyer audit
+
+Operator gave me a wider-lens final audit pass: look at Crew OS as a sceptical UK tradesperson, audit the research against what was built, find what would make a real plumber wince. I did it. Here's what.
+
+### What the audit caught
+
+**Site copy promised things v0 doesn't deliver:**
+- "Talk it out, type it up, or paste your site notes" — voice doesn't exist in v0.
+- "We chase the customer for you until the job's booked" — v0 sends one quote to the trader. No customer-side chase.
+- "We'll get in touch in 24 hours and book a 10-minute call" — no one's calling; operator is gone for 14 days.
+- "UK-hosted infrastructure" — false. GitHub Pages global CDN + Resend EU + Groq US.
+- "Finley reads escalations" — false for the 14-day window; AI handles support replies until May 29.
+- "£99 template migration" — SaaS jargon a plumber would not parse.
+- "Pilots 0/5 · Paid 0" header ticker — calibrated for indie-hacker eyes on Reddit; for the actual buyer it actively destroys trust ("nobody is using this yet").
+
+**Decision-vs-reality gap:** `research/decision.md` still says "voice note + photos → sent-in-minutes branded client quote AND an automated follow-up sequence". v0 ships text-only, trader-review-only, one-time nudge to the trader (after this release). The decision was right (the thesis holds — UK trades B2B underserved, quote workflow is the pain, tombstone test survives) but the headline overpromised vs. what shipped. Logged the gap in DECISIONS.md — kept decision.md unchanged so the original thesis is preserved as-recorded.
+
+**Broken cold-email CTA:** every cold email tells recipients to reply "send it" to join the pilot. `inbound_triage` classified those as generic cold replies and sent the auto-ack — not the onboarding template. Promise broken on contact.
+
+### What I built in response
+
+1. **Trader-nudge workflow** (`scripts/trader_nudge.py` + `.github/workflows/trader-nudge.yml`, daily 10:00 UK BST). Smallest defensible version of "we chase": one reminder to the **trader** at the 3-day mark on each quote. Doesn't email the customer. Idempotent via `nudge_sent_at` in result.json. Logs to `outbound/nudges.csv`. This honours step 3 of the landing page promise without spamming customers.
+
+2. **"Send it" trigger fix** in `inbound_triage.py`. Cold-reply bodies containing "send it", "yes", "I'm in", "count me in", or "sign me up" now route to the full pilot-signup flow (onboarding template), not the generic ack. 12/12 unit-test cases pass.
+
+3. **Site honesty pass** — every false promise listed above corrected or removed. Site copy now matches v0 reality:
+   - Step 1 of how-it-works: text intake (no voice).
+   - Step 3: trader-nudge at 3 days (not customer chase).
+   - Pilot section: "intake template within an hour" (not 10-min calls).
+   - Pricebar: 3 items, dropped the £99 migration line.
+   - FAQ: actual stack disclosure (GitHub Pages CDN + Resend EU + Groq US, "don't send sensitive personal data we don't need").
+   - FAQ: "Replies are AI-handled until 29 May 2026; Finley reads escalations after."
+   - New FAQ: "What v0 does and doesn't do (honest list)".
+   - Footer: operator contact email + version tag + no-tracking note.
+   - `<meta description>` and Open Graph tags rewritten to match shipped reality.
+
+4. **Docs**: `v0/README.md` ships a complete "doesn't do yet" list. `RUNBOOK.md` now lists 6 workflows (added trader-nudge + day-14-retrospective). `CHANGELOG.md` documents v0.1.2 in full.
+
+### What I deliberately didn't do
+
+- **Build voice intake.** Would need Whisper API path + file upload (Formspree free tier blocks uploads) + multi-part email parsing. ~2 days of work. Higher priority is shipping a working text v0 to real pilots first.
+- **Build customer-side chase.** Would need customer-email validation, unsubscribe links from customer's view, multi-touch sequence, reply detection on the customer side. Responsibly building this is ~3 days. The trader-nudge captures most of the value (trader stops forgetting) without spamming customers.
+- **Rewrite decision.md.** The thesis still holds — pick was right. The headline overpromised what shipped; that's logged in DECISIONS.md, not papered over in the source doc.
+- **Add a privacy policy page.** The footer + the data FAQ together cover the GDPR-101 disclosures (where data lives, what we use it for, retention). A full policy is paid-template territory and the brief is £0.
+- **Seed the targets list.** Same call as v0.1.1 — ethical sourcing in-session unreliable.
+
+### Final shape at end of session
+
+- 8 visible commits + this entry, tag `v0.1.2` to follow on push.
+- 6 workflows active. All push-emitting workflows use pull-rebase-retry.
+- v0 product: text-intake → branded HTML quote → 3-day trader nudge. All wired end-to-end, all idempotent.
+- `outbound/suppressions.csv`: live, empty. Honours "reply stop" promise.
+- Site: every promise on the page can be honoured by what's wired up. No active misrepresentations.
+- All Python compiles, all workflow YAML well-formed, site HTTP 200.
+
+**Next:** workflows take over. Day-14 retro fires 29 May 17:00 UK BST. See you on Day 14.
+
 ## 2026-05-16 — FINAL SESSION — v0.1.1 hardening
 
 Operator gave me a final open-scope session before going dark. I audited the Day-0 build like a stranger, picked five things worth doing, did them, skipped the rest with reasons.
