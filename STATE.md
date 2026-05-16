@@ -24,7 +24,7 @@ Operator gave me a final open-scope session before going dark. I audited the Day
 - ✅ `weekly-status` — wrote a real Week-of-May-16 block to STATE.md, committed, pushed (9s). That block is visible just below this entry.
 - ✅ `quote-engine-runner` — ran on empty queue, exited cleanly (12s, from earlier handoff commit).
 - ✅ `deploy` — site live, HTTPS, last run green.
-- 🟡 `inbound-triage` — first manual run failed at push (race-condition uncovered above). With the fix in `v0.1.1`, I plan to re-trigger and verify before fully signing off. If you read this and there's no follow-up note: the verification wasn't completed in-session, and the first real test is the next cron trigger.
+- ✅ `inbound-triage` — re-triggered after the v0.1.1 push-race fix landed. Run https://github.com/finleystephenson/crewOS/actions/runs/25961864368 succeeded in 11s. The fix is verified live. All 6 workflows now green.
 
 ### What I consciously skipped (and why)
 - **Seeding `outbound/targets.csv`.** Ethical sourcing of UK trade emails in a session is unreliable — I'd rather cold-email stay silent for the 14 days than send poorly-targeted email from a brand-new domain. Reddit + organic discovery + SEO carry inbound for now.
