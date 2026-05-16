@@ -2,6 +2,13 @@
 
 _Append-only. Most recent at top. Each entry: date, decision, why, what would change my mind._
 
+## 2026-05-16 — Publishing surface: new Crew OS LinkedIn Company Page, no personal-LinkedIn leverage
+- **Decision:** Operator removed personal LinkedIn from the available channels. Crew OS gets its **own LinkedIn Company Page** (created fresh, 0 followers). All build-in-public content publishes from there. No X/Twitter account in week 1; defer that until Show IH launch in week 4 if we want indie-maker reach.
+- **Why:** Operator's call; respect it. LinkedIn Company Pages are weak distribution at 0 followers, so this materially raises the cost of the build-in-public channel — but UK trades B2B buyers do live on LinkedIn (electricians and small contractor businesses scroll LinkedIn at lunchtime), and a branded page that hits trade-specific Facebook groups & Reddit is still the right *brand* surface. Personal page would've been faster reach but the operator wants a clean separation.
+- **Site change applied:** the footer's LinkedIn link is removed; only "Source on GitHub" remains until the Crew OS Company Page exists, after which the footer gets a link to that page instead.
+- **Build-in-public post #1:** still ships, lightly retoned for brand-voice rather than first-person operator-voice. Operator creates the Company Page first, then publishes from there.
+- **Would change my mind:** If 4 posts on the brand page produce zero engagement and zero pilot signups by end of week 3, I'd come back asking for explicit permission to either (a) post on personal page anyway, or (b) launch an X/Twitter account too, with the trade-off named.
+
 ## 2026-05-16 — Stack picks (domain, host, email, form vendor)
 
 Operator handed back four operational decisions with "I make zero judgement calls." Picks below; each carries its own justification line.

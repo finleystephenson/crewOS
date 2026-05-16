@@ -87,3 +87,48 @@ _Updated end-of-session. Most recent at top._
 - Begin v0 quote-engine build in `/v0/` (Python + Anthropic API + Whisper, runs locally end-to-end first).
 
 **Blocked:** Operator clicks 1–4 above. Everything I can do without operator's hands is queued up to start the moment the repo is live.
+
+## 2026-05-16 — Session 2 (cont.) — Stack picks made, click-by-click handoff
+**Did:**
+- Operator handed back the four operational picks. Made them all in `DECISIONS.md` and prepped supporting files:
+  - **Domain:** `crewos.co.uk` registered via Hostinger (~£10, the brief's one allowed spend).
+  - **Host:** GitHub Pages via Actions workflow (`/site/` is the source of truth).
+  - **Email:** `crewos.uk@gmail.com` (fallback chain documented).
+  - **Form:** Formspree free tier; one form, email-only field.
+- Added `.github/workflows/deploy.yml` (standard GitHub-Pages-via-Actions).
+- Added `site/CNAME` containing `crewos.co.uk`.
+- Edited `site/index.html` footer to drop the broken mailto until ImprovMX forwarding is live in week 2; added a LinkedIn link (assumed `linkedin.com/in/finleystephenson/` — operator can correct).
+- Staged 12 files. **Still not committed** — operator's git identity isn't set (per brief, I don't modify config). Commit + push are operator steps in the handoff.
+- Wrote the full click-by-click handoff in the chat reply.
+
+**Next (my side, after operator finishes click checklist):**
+- Verify the site is live at `https://crewos.co.uk` and the Formspree form posts a real test signup.
+- Ship the cold-outreach pack (`/offer/cold-outreach/`): 3 FB-group variants, 1 Reddit Show-IH, 1 Checkatrade cold email.
+- Begin v0 quote engine in `/v0/`.
+- Set up ImprovMX forwarding `hello@crewos.co.uk → crewos.uk@gmail.com` once Gmail is registered (week 2 task; deferred to keep the critical path clean).
+
+**Blocked:** Operator click-by-click checklist (~10 steps, est. 25 min).
+
+## 2026-05-16 — Session 2 (cont.) — Status post-first-push
+**Operator-side progress:**
+- ✅ Gmail registered: `crewos.uk@gmail.com`. (Password leaked into chat; operator instructed to rotate.)
+- ✅ Domain registered: `crewos.co.uk` via Hostinger.
+- ✅ First push to GitHub: 12 files, root commit `0008c75`. Repo is now public at https://github.com/finleystephenson/crewOS.
+- ✅ Formspree form created. Form ID: `maqvrvve`. Plan: free.
+- ❌ GitHub Pages: not enabled yet ("it didn't work" — operator did not complete the Settings → Pages → Source = "GitHub Actions" step).
+- ❌ DNS at Hostinger: "I think I broke it" — incomplete; needs nuke-and-pave below.
+- ⛔ Personal LinkedIn ruled out by operator. Replaced with: create a fresh Crew OS LinkedIn Company Page; rebrand build-in-public to post from there.
+
+**My-side changes this turn:**
+- Patched `site/index.html`: real Formspree ID wired in; personal LinkedIn link removed from footer.
+- Lightly retoned `content/linkedin-buildinpublic-01.md` from operator-voice → brand-voice (Company Page).
+- `DECISIONS.md`: new entry "Publishing surface: new Crew OS LinkedIn Company Page, no personal-LinkedIn leverage" added at top.
+
+**Next operator clicks (in chat):**
+1. Rotate Gmail password (security).
+2. Enable Pages with the *exact* clicks I've spelt out for the Settings page.
+3. DNS nuke-and-pave at Hostinger using the explicit table I've given.
+4. Create Crew OS LinkedIn Company Page (~3 min).
+5. `git commit -m "Wire Formspree + drop personal LinkedIn + Company Page brand voice"` + `git push`.
+
+**Once those land:** site is live at https://crewos.co.uk with working form; build-in-public post #1 publishes from the Crew OS Company Page; I move to cold-outreach pack + v0 quote engine.
