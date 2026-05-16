@@ -2,6 +2,42 @@
 
 All meaningful releases of Crew OS. Append-only.
 
+## v0.1.3-preflight — Pre-flight audit fixes (2026-05-16)
+
+Audit of the autonomous machine against load-bearing failure modes within
+the 13-day window. Three real bugs found, three fixed. Everything else
+deferred to `/day-14-todo.md`.
+
+**Load-bearing fixes**
+- `v0/quote_engine.py::_call_groq` — `response_format` is now an optional
+  parameter. Was previously hard-coded to `{"type": "json_object"}` which
+  works for `generate_quote` (JSON expected) but would break
+  `cold_email_batch._personalise` on first real cold-email send (Groq
+  requires the word "json" in the prompt when this mode is set, and plain-
+  text prompts get malformed or rejected output).
+- `.github/workflows/day-14-retrospective.yml` — cron shifted from
+  `0 16 29 5 *` to `30 16 29 5 *` (16:30 UTC) so it doesn't collide with
+  weekly-status (`0 16 * * 5`) when May 29 falls on a Friday. May 29 2026
+  IS a Friday, so both would have fired simultaneously and modified
+  STATE.md at the top, risking a rebase conflict.
+- `scripts/inbound_triage.py::handle_cold_reply` — self-loop guard added.
+  If sender is on our own domain (`*@crewos.co.uk` or
+  `crewos.uk@gmail.com`), skip auto-ack and log to `needs_human.csv`
+  instead. Prevents ping-pong chains from out-of-office bounces, our own
+  test sends, or mail-forward misconfig.
+
+**Verified**
+- All 9 Python modules import cleanly from a CI-like sys.path.
+- Self-loop guard: 6/6 unit-test cases pass.
+- All cron schedules walked through May–June 2026: no other collisions.
+
+**New artefact**
+- `/day-14-todo.md` — 22+ deferred items across polish, plumbing, product,
+  repo hygiene, and strategy. Each independent, each labelled. Pick freely
+  on Day 14.
+
+---
+
 ## v0.1.2 — Honesty pass + trader-nudge (2026-05-16)
 
 Audit of the public surface as a sceptical UK tradesperson — caught several

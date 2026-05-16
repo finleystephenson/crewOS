@@ -2,8 +2,10 @@ name: Day 14 retrospective (writes the May 29 retro block)
 
 on:
   schedule:
-    # May 29 at 16:00 UTC ≈ 17:00 UK BST each year. Fires once on the hard cap date.
-    - cron: "0 16 29 5 *"
+    # May 29 at 16:30 UTC ≈ 17:30 UK BST. Deliberately 30 min after weekly-status
+    # (Friday 16:00 UTC) so that on the years when May 29 is a Friday — 2026
+    # being one — the two workflows don't collide on STATE.md.
+    - cron: "30 16 29 5 *"
   workflow_dispatch:
 
 permissions:

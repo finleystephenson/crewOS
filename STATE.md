@@ -2,6 +2,50 @@
 
 _Updated end-of-session. Most recent at top._
 
+## 2026-05-16 — v0.1.3-preflight — last audit before going dark
+
+Operator's last brief: not "what to build", but "does the machine actually run for 13 days." I audited each workflow against load-bearing failure modes. Three were real bugs that would silently hurt within the window. Three are now fixed. Everything else is logged in `/day-14-todo.md` (not built — out of scope per the brief's bar of "if I don't fix this, the machine breaks").
+
+### Load-bearing bugs found and fixed
+
+1. **`_call_groq` always forced JSON-mode (`response_format: json_object`).** Fine for `quote_engine.generate_quote` which asks for JSON. But `cold_email_batch._personalise` calls the same helper expecting plain-text email body. First real cold email to a real target would either be rejected by Groq (which requires the word "json" in the prompt when this mode is set) or return malformed wrapping. Fixed: `response_format` is now an optional parameter; quote engine passes it explicitly, cold-email-batch doesn't.
+
+2. **Day-14 cron collided with weekly-status on May 29.** Day-14 was `cron: "0 16 29 5 *"` (May 29 16:00 UTC), weekly-status is `cron: "0 16 * * 5"` (Fridays 16:00 UTC). May 29 2026 is a Friday — both fire at the same minute, both modify STATE.md at the top, pull-rebase-retry would probably resolve but could conflict on the same lines. Fixed: Day-14 shifted to `cron: "30 16 29 5 *"` (16:30 UTC = 17:30 UK BST, 30 min after weekly-status).
+
+3. **No self-loop guard on `inbound_triage.handle_cold_reply`.** If an email FROM our own domain (`*@crewos.co.uk` or `crewos.uk@gmail.com`) somehow lands in our inbox — out-of-office bounces, our own test sends, mail-forward misconfig — triage would classify it as a cold_reply and send an auto-ack to ourselves, creating a ping-pong chain. Bounded by Gmail labels per-message but produces noise per link. Fixed: skip-with-log for any sender in our domain. 6/6 unit-test cases pass.
+
+### Verifications I ran
+
+- **All 9 Python modules import cleanly** from CI-like sys.path.
+- **`_call_groq` signature** confirmed to take optional `response_format` param.
+- **Self-loop guard unit tests** — 6 cases including real customer, our own bot, our own gmail, plus edge addresses. All pass.
+- **CHANGELOG.md previous-release lint** — confirmed v0.1.0/v0.1.1/v0.1.2 entries still match shipped state.
+- **Cron schedules** — explicitly walked through May–June 2026 to verify no other date collisions in the 13-day window: trader-nudge daily 09:00 UTC, weekly-status Fri 16:00 UTC, cold-email-batch Mon–Fri 10:00 UTC, inbound-triage every 2h UK day, day-14 only May 29 16:30 UTC. **No collisions remain.**
+
+### Deferred to `day-14-todo.md` (not load-bearing)
+
+- Trader-nudge "Hi there" / "your customer" hardcoded fallbacks (cosmetic — process() doesn't save names yet).
+- `dt.datetime.utcnow()` deprecation warning in quote_engine.py (warning only, still functional).
+- Sample-quote screenshot on the landing page (would help conversion, doesn't break anything).
+- Privacy/legal page proper.
+- Stripe/billing wiring (no pilot can pay until this exists).
+- Resend bounce tracking (silent failure mode for real cold-email volume, mitigated by 0 volume currently).
+- ImprovMX DNS conflict at Hostinger (still — one click for operator).
+- Decision.md headline mismatch with v0 reality (logged in DECISIONS.md, not papered over in source doc).
+- 22 other items spanning polish, plumbing, product, repo hygiene, strategy. All in `/day-14-todo.md`.
+
+### What I'm NOT certain of
+
+- **Resend "from" address acceptance under live load.** The helper sends from `Crew OS <quotes@crewos.co.uk>`. Resend verifies domains, not specific addresses, so any alias on a verified domain should work. Smoke tests didn't actually fire to a real recipient — saving API budget and avoiding the self-loop. First real cold email or first real quote is the real test. If it fails: Resend's send response will be 4xx and the workflow logs the error, the run shows red in Actions, and the next weekly-status will surface the issue.
+- **Groq Llama JSON-mode reliability.** The model usually returns clean JSON when asked. We rely on `json.loads()` succeeding on raw model output. If the model occasionally drifts, the quote-engine-runner retries 3× (with 2/4/8s backoff) and moves to `_failed/` if all retries miss. Failures will be visible in the queue.
+- **Gmail IMAP under unusual mail.** The classifier's case coverage matches our intentional inbound shapes (Formspree, intake-replies, cold-replies). Anything weird routes to `needs_human.csv`. That's the safety valve. If it accumulates, weekly-status will count it.
+
+### Tag
+
+About to push as `v0.1.3-preflight`. Final tag before operator return.
+
+**Next:** workflows take over. Day-14 retro fires automatically Friday May 29 at 16:30 UTC (17:30 UK BST). I'm out.
+
 ## 2026-05-16 — v0.1.2 — Honesty pass after sceptical-buyer audit
 
 Operator gave me a wider-lens final audit pass: look at Crew OS as a sceptical UK tradesperson, audit the research against what was built, find what would make a real plumber wince. I did it. Here's what.

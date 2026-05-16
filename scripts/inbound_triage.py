@@ -153,6 +153,22 @@ def handle_cold_reply(item: dict[str, Any]) -> dict[str, Any]:
     body_preview = item.get("body_preview") or ""
     sender_email = _extract_addr(item.get("from", ""))
 
+    # Self-loop guard: if the sender is one of our own domain addresses,
+    # don't auto-ack. Prevents infinite ping-pong if our bot somehow receives
+    # its own outbound mail (out-of-office bounces, test sends, misconfigured
+    # forwards). Log it but take no further action.
+    if sender_email and ("@crewos.co.uk" in sender_email.lower() or "crewos.uk@gmail.com" in sender_email.lower()):
+        _csv_append(
+            OUTBOUND / "needs_human.csv",
+            {
+                "ts": _now_iso(),
+                "from": item.get("from", ""),
+                "subject": item.get("subject", ""),
+                "preview": ("[self-loop guard] " + body_preview)[:400],
+            },
+        )
+        return {"action": "skipped_self_loop", "from": sender_email}
+
     _csv_append(
         OUTBOUND / "cold_replies.csv",
         {

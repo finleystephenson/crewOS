@@ -80,22 +80,34 @@ Return ONLY valid JSON matching this exact schema, no markdown fences, no prose:
 """
 
 
-def _call_groq(messages: list[dict], temperature: float = 0.2) -> str:
+def _call_groq(
+    messages: list[dict],
+    temperature: float = 0.2,
+    response_format: dict | None = None,
+) -> str:
+    """Call Groq's OpenAI-compatible chat completions endpoint.
+
+    `response_format` is optional. Pass `{"type": "json_object"}` only when the
+    system prompt explicitly asks for JSON — passing it on plain-text prompts
+    can break the response or get rejected by Groq.
+    """
     key = os.environ.get("GROQ_API_KEY")
     if not key:
         raise RuntimeError("GROQ_API_KEY not set in env")
+    body: dict[str, Any] = {
+        "model": GROQ_MODEL,
+        "messages": messages,
+        "temperature": temperature,
+    }
+    if response_format:
+        body["response_format"] = response_format
     resp = requests.post(
         GROQ_URL,
         headers={
             "Authorization": f"Bearer {key}",
             "Content-Type": "application/json",
         },
-        json={
-            "model": GROQ_MODEL,
-            "messages": messages,
-            "temperature": temperature,
-            "response_format": {"type": "json_object"},
-        },
+        json=body,
         timeout=60,
     )
     resp.raise_for_status()
@@ -118,7 +130,8 @@ def generate_quote(intake: dict[str, Any]) -> dict[str, Any]:
         [
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": user_prompt},
-        ]
+        ],
+        response_format={"type": "json_object"},
     )
     return json.loads(raw)
 
