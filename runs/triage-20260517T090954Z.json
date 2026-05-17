@@ -1,0 +1,11 @@
+{
+  "ran_at": "2026-05-17T09:09:54Z",
+  "messages_seen": 1,
+  "actions": [
+    {
+      "kind": "needs_human",
+      "action": "logged_for_human",
+      "subject": "crewos.co.uk was successfully added!"
+    }
+  ]
+}
