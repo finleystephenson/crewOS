@@ -1,0 +1,16 @@
+{
+  "ran_at": "2026-05-18T11:11:04Z",
+  "messages_seen": 2,
+  "actions": [
+    {
+      "kind": "needs_human",
+      "action": "logged_for_human",
+      "subject": "Weekly uptime report - May 2026"
+    },
+    {
+      "kind": "needs_human",
+      "action": "logged_for_human",
+      "subject": "Our limited-time offer: Get 25% OFF UptimeRobot upgrades!"
+    }
+  ]
+}
