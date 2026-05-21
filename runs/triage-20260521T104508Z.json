@@ -1,0 +1,11 @@
+{
+  "ran_at": "2026-05-21T10:45:08Z",
+  "messages_seen": 1,
+  "actions": [
+    {
+      "kind": "needs_human",
+      "action": "logged_for_human",
+      "subject": "\ud83d\udd14Alert your team about incidents."
+    }
+  ]
+}
